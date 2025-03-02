@@ -15,7 +15,12 @@ class Email:
     is_phish: bool
 
     def as_js_dict(self) -> str:
-        return '"SUB": "BODY"'.replace('SUB', self.subject).replace('BODY', self.body.replace('"', '\\"')) 
+        return '"SUB": "<p>BODY</p>"'\
+            .replace('SUB', self.subject)\
+            .replace('BODY', self.body\
+                .replace('"', '\\"')\
+                .replace('\n', '</p><p>')
+            ) 
 
     def as_html(self) -> str:
         preview = self.body
@@ -35,7 +40,7 @@ class Email:
 </div>"""
 
 class Game:
-    day: int = 1
+    day: int = 0
     valid_emails: dict[str, tuple[str]] = {
         'Wells Fargo': ('alerts@wellsfargo.com',),
         'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org')
@@ -51,6 +56,7 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
+        cls.emails.append(Email('Dev Team', 'supercoolawesomepeople.gov', 'Helpful info', "Hello! Welcome to Phish Mail, the digital post office that tests your email expertise that increases in difficulty as time passes. The game is simple, read your inbox and determine if each email is fake or fact. Click an email, read it, and click the archive button if it’s real, or delete it if they’re phishing. Click the website tab to view any link that you find in an email and utilize the info tab to find confirmed information about the companies that may be trying to contact you to see if they’re legit or not. Climb your way through the days, confirming that you are the ultimate anti phisher. Happy reading! Dev team", {}, False))
         cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
@@ -125,6 +131,7 @@ class Game:
     def new_address(cls) -> Email: ''' Gemini creates a random address.'''
 
 
+
 @route('/img/<filename>')
 def server_static(filename) -> str:
      ''' Get images '''
@@ -143,8 +150,8 @@ def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
     page = page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
     page = page.replace('EMAILDICTEMAILDICTEMAILDICT', ',\n\t\t\t'.join(e.as_js_dict() for e in Game.emails))
+    page = page.replace('DAYDAYDAYDAY', str(Game.day));
     return page
-
 
 @route('/browser')
 def browser():
