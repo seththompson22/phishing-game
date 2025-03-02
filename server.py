@@ -40,7 +40,7 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
-        cls.make_email_batch(cls.day - 1)  # Generate a batch of emails
+        cls.emails.append(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
     @classmethod
@@ -137,8 +137,6 @@ def browser():
 def info():
     with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
     return page
-
-
 
 # Generate emails for the game
 Game.generate_emails()
