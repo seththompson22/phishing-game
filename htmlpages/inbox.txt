@@ -369,6 +369,8 @@
             });
         });
 
+        let isPhish = {ISPHISHISPHISHISPHISH};
+
         // Add delete functionality
         const deleteButtons = document.querySelectorAll('.delete-button');
         deleteButtons.forEach(button => {
@@ -376,7 +378,15 @@
                 e.preventDefault(); // Prevent the link from being triggered
                 e.stopPropagation(); // Prevent the email link from being triggered
                 const email = button.closest('.email');
-                // email.remove(); // Remove the email from the DOM
+                 const subject = email.querySelector('.email-content').querySelector('.email-subject');
+                if (isPhish[subject.innerText]) {
+                    alert("Correct! Keep Going!");
+                    email.remove(); 
+                }
+                else {
+                    alert("SILLY GOOSE!!! THAT WAS A REAL EMAIL!");
+                    email.remove();
+                }
             });
         });
 
@@ -387,7 +397,15 @@
                 e.preventDefault(); // Prevent the link from being triggered
                 e.stopPropagation(); // Prevent the email link from being triggered
                 const email = button.closest('.email');
-                alert('Email archived!'); // Replace with actual archive logic
+                const subject = email.querySelector('.email-content').querySelector('.email-subject');
+                if (isPhish[subject.innerText]) {
+                    alert("GAME OVER!!! THIS WAS A PHISH, YOU'VE BEEN PHISHED!");
+                    document.location.href = '/';
+                }
+                else {
+                    alert("Correct! Keep Going!");
+                    email.remove();
+                }
             });
         });
 
@@ -416,7 +434,7 @@
                 previewSender.textContent = sender;
                 previewSubject.textContent = subject;
                 console.log(bodies[subject]);
-                previewContent.textContent = bodies[subject];
+                previewContent.innerHTML = bodies[subject];
                 // Show the preview box
                 previewBox.style.display = 'block';
             });

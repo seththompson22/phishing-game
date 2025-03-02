@@ -1,4 +1,4 @@
-from bottle import route, run, static_file
+from bottle import route, run, static_file, request
 from random import shuffle
 from dataclasses import dataclass
 from gemini import generate_email_with_gemini
@@ -15,11 +15,11 @@ class Email:
     is_phish: bool
 
     def as_js_dict(self) -> str:
-        return '"SUB": "<p>BODY</p>"'\
+        return '"SUB": "BODY"'\
             .replace('SUB', self.subject)\
             .replace('BODY', self.body\
                 .replace('"', '\\"')\
-                .replace('\n', '</p><p>')
+                .replace('\n', '<br/>')
             ) 
 
     def as_html(self) -> str:
@@ -41,6 +41,7 @@ class Email:
 
 class Game:
     day: int = 0
+    name: str
     valid_emails: dict[str, tuple[str]] = {
         'Wells Fargo': ('alerts@wellsfargo.com',),
         'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org'),
@@ -72,17 +73,16 @@ class Game:
     }
     todays_valid_emails: list[str] = []
     emails: list[Email] = [
-        Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
-        Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
-        Email('Carl Wheezer', 'carl@wheezer.ne', 'Excuse me', 'Can i have that croissant', {'fakeperson'}, True)
+        #Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing/n in park on tuesday!', {'fakeperson'}, True),
+        #Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
+        #Email('Carl Wheezer', 'carl@wheezer.ne', 'Excuse me', 'Can i have that croissant', {'fakeperson'}, True)
         # Email('Twilight Sparkle', 'tsparkle@mylittlepony.gov', 'Friendship', 'THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY <a href="givememoney.gov">donate today</a>THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY ', {'fakeperson'}, True),
     ]
 
     @classmethod
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
-        cls.emails.clear()
-        cls.emails.append(Email('Dev Team', 'supercoolawesomepeople.gov', 'Helpful info', "Hello! Welcome to Phish Mail, the digital post office that tests your email expertise that increases in difficulty as time passes. The game is simple, read your inbox and determine if each email is fake or fact. Click an email, read it, and click the archive button if it’s real, or delete it if they’re phishing. Click the website tab to view any link that you find in an email and utilize the info tab to find confirmed information about the companies that may be trying to contact you to see if they’re legit or not. Climb your way through the days, confirming that you are the ultimate anti phisher. Happy reading! Dev team", {}, False))
+        cls.emails.append(Email('Dev Team', 'supercoolawesomepeople.gov', 'Helpful info', "Hello! Welcome to Phish Mail, the digital post office that tests your email expertise that increases in difficulty as time passes. The game is simple, read your inbox and determine if each email is fake or fact. Click an email, read it, and click the archive button if it’s real, or delete it if they’re phishing. Click the website tab to view any link that you find in an email and utilize the info tab to find confirmed information about the companies that may be trying to contact you to see if they’re legit or not. Climb your way through the days, confirming that you are the ultimate anti phisher. Happy reading! <br/><br/>Dev team", {}, False))
         cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
@@ -101,11 +101,22 @@ class Game:
         Returns:
             list[Email]: A list of Email objects.
         """
+        if number_of_emails < 1:
+            return []
+
 
         cls.get_todays_valid_email_keys(cls.day)
         todays_email_keys = cls.todays_valid_emails
         todays_valid_emails = [email for key in todays_email_keys for email in cls.valid_emails[key]]
         print(todays_valid_emails)
+
+        senders = cls.get_todays_valid_email_keys(cls.day)
+        print("Senders:", senders)
+        senders_valid_emails = [cls.valid_emails[key][0] for key in senders]
+        print("Senders valid emails:", senders_valid_emails)
+        sender_emails = cls.create_input_emails(number_of_emails, senders_valid_emails)
+        print("Sender emails:", sender_emails)
+
 
         emails = []
         fallback_email = Email(
@@ -119,7 +130,7 @@ class Game:
 
         try:
             raw_response = generate_email_with_gemini(
-                "John Smith", todays_valid_emails, "gemini-2.0-flash-lite", number_of_emails
+                cls.name, sender_emails, senders, len(sender_emails), "gemini-2.0-flash-lite", 
             )
 
             if raw_response:
@@ -201,6 +212,40 @@ class Game:
         cls.todays_valid_emails = todays_email_keys
         return todays_email_keys
 
+
+    @classmethod
+    def create_input_emails(cls, num_emails: int, emails: list[str]) -> list[str]:
+        ''' Returns a list of emails [str] for the day, with p phishing and n non-phishing '''
+        if num_emails < 1:
+            return []
+        if num_emails == 1:
+            p = 1
+            n = 0
+        else:
+            p = rint(1, min(num_emails, cls.day))  # Ensure p is between 1 and the minimum of num_emails and cls.day
+            n = rint(0, cls.day - 1)  # Ensure n is between 0 and cls.day - 1
+
+        p_to_change = rsample(emails, p)
+        phishing_emails = []
+        non_phishing_emails = [email for email in emails if email not in p_to_change]
+
+        for email in p_to_change:
+            if rint(1, 100) <= 70:  # 70% chance to spoofify the email
+                phishing_emails.append(cls.spoofify_address(email))
+            else:
+                phishing_emails.append(email)
+            print(f"Phishing email: {email}")
+
+        print(f"Non-phishing emails: {non_phishing_emails}")
+
+        final_stuff = []
+        for email in non_phishing_emails:
+            final_stuff.append((email, "non_phishing"))
+        for email in phishing_emails:
+            final_stuff.append((email, "phishing"))
+
+        print(final_stuff)
+        return final_stuff
     
 
 
@@ -216,12 +261,23 @@ def index() -> str:
     with open('htmlpages/login.html') as file: page = ''.join(file.readlines())
     return page
 
+@route('/save_username', method='POST')
+def save_username():
+    ''' Save username '''
+    username = request.forms.get('username')
+    if username:
+        with open('username.txt', 'w') as file:
+            file.write(username)
+        Game.name = username  # Update Game.name
+        print(Game.name)
+    redirect('/inbox')
 
 @route('/inbox')
 def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
     page = page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
     page = page.replace('EMAILDICTEMAILDICTEMAILDICT', ',\n\t\t\t'.join(e.as_js_dict() for e in Game.emails))
+    page = page.replace('ISPHISHISPHISHISPHISH', ',\n\t\t\t'.join(f'"{e.subject}": true' if e.is_phish else f'"{e.subject}": false' for e in Game.emails))
     page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
 
@@ -254,6 +310,13 @@ def nextday():
     Game.generate_emails()
     return inbox()
 
+
+# Read the saved username from the file when the server starts
+try:
+    with open('username.txt', 'r') as file:
+        Game.name = file.read().strip()
+except FileNotFoundError:
+    Game.name = 'homeslice'  # Default username if the file does not exist
 
 # Generate emails for the game
 Game.generate_emails()
