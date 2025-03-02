@@ -13,23 +13,23 @@ class Email:
 
     def as_html(self) -> str:
         preview = self.body
-        if '.' in preview: preview = preview[0:preview.index(':')]
-        return """
+        if '.' in preview: preview = preview[0:preview.index('.')]
+        return f"""
 <a href="https://example.com/email/2" class="email">
     <div class="email-buttons">
         <button class="archive-button">Archive</button>
         <button class="delete-button">Delete</button>
     </div>
     <div class="email-content">
-        <div class="email-sender">{self.address}</div>
+        <div class="email-sender">{self.name} | {self.address}</div>
         <div class="email-subject">{self.subject}</div>
-        <div class="email-preview">{preview}</div>
+        <div class="email-preview">{preview}...</div>
     </div>
 </a>"""
 
 class Game:
     day: int = 1
-    emails: list[Email] = []
+    emails: list[Email] = [Email('waluigi', 'waluigi@nintendo.com', 'free waluigi games', 'WAH. WAH WAH WAH WAH WAH WAH WAH WAH WAH. WAHWFAWFAWOFAORNWAORNONAWROAWJEDNAWON', {}, True)]
     times_phished: int = 0
 
     @classmethod
@@ -48,20 +48,28 @@ class Game:
 
 
 
-class Pages:
-    @staticmethod
-    def emails() -> str:
-        with open('htmlpages/emails.txt') as template:
-            page = ''.join(template.readlines())
-        page.replace('{{{{{{{{EMAILS}}}}}}}}', ''.join(e.as_html() for e in Game.emails))
-        return page
-
-
 @route('/')
-def index() -> str: return hello('homeslice@phishmail.com')
+def index() -> str:
+    ''' Loading page '''
+    with open('htmlpages/loading.html') as file: page = ''.join(file.readlines())
+    return page
 
-@route('/hello/<name>')
-def hello(name):
-    return f'Hello {name}!'
+
+@route('/inbox')
+def inbox():
+    with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
+    return page.replace('EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
+
+
+@route('/browser')
+def browser():
+    return 'NEEDS IMPLEMENTATION'
+
+
+@route('/info')
+def info():
+    return 'NEEDS IMPLEMENTATION'
+
+
 
 run(host='localhost', port=8080, debug=True)

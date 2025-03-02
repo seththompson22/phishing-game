@@ -269,16 +269,13 @@
             <div class="tab" data-tab="info">
                 <span>Info</span>
             </div>
-            <div class="tab" data-tab="settings">
-                <span>Settings</span>
-            </div>
         </div>
 
         <!-- Content -->
         <div class="content">
             <div id="email-tab" class="tab-content active">
                 <div class="email-list">
-                    {{{{{{{{EMAILS}}}}}}}}
+                    EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS
                 </div>
             </div>
             <div id="website-tab" class="tab-content">
