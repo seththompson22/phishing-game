@@ -434,7 +434,7 @@
                 previewSender.textContent = sender;
                 previewSubject.textContent = subject;
                 console.log(bodies[subject]);
-                previewContent.textContent = bodies[subject];
+                previewContent.innerHTML = bodies[subject];
                 // Show the preview box
                 previewBox.style.display = 'block';
             });

@@ -15,11 +15,11 @@ class Email:
     is_phish: bool
 
     def as_js_dict(self) -> str:
-        return '"SUB": "<p>BODY</p>"'\
+        return '"SUB": "BODY"'\
             .replace('SUB', self.subject)\
             .replace('BODY', self.body\
                 .replace('"', '\\"')\
-                .replace('\n', '</p><p>')
+                .replace('\n', '<br/>')
             ) 
 
     def as_html(self) -> str:
@@ -71,7 +71,7 @@ class Game:
         'Local Grocery Store': ('orders@localgrocerystore.com', 'info@localgrocerystore.com') #Replace with a real local store
     }
     emails: list[Email] = [
-        Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
+        Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing/n in park on tuesday!', {'fakeperson'}, True),
         Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
         Email('Carl Wheezer', 'carl@wheezer.ne', 'Excuse me', 'Can i have that croissant', {'fakeperson'}, True)
         # Email('Twilight Sparkle', 'tsparkle@mylittlepony.gov', 'Friendship', 'THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY <a href="givememoney.gov">donate today</a>THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY ', {'fakeperson'}, True),
@@ -81,7 +81,7 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
-        cls.emails.append(Email('Dev Team', 'supercoolawesomepeople.gov', 'Helpful info', "Hello! Welcome to Phish Mail, the digital post office that tests your email expertise that increases in difficulty as time passes. The game is simple, read your inbox and determine if each email is fake or fact. Click an email, read it, and click the archive button if it’s real, or delete it if they’re phishing. Click the website tab to view any link that you find in an email and utilize the info tab to find confirmed information about the companies that may be trying to contact you to see if they’re legit or not. Climb your way through the days, confirming that you are the ultimate anti phisher. Happy reading! Dev team", {}, False))
+        cls.emails.append(Email('Dev Team', 'supercoolawesomepeople.gov', 'Helpful info', "Hello! Welcome to Phish Mail, the digital post office that tests your email expertise that increases in difficulty as time passes. The game is simple, read your inbox and determine if each email is fake or fact. Click an email, read it, and click the archive button if it’s real, or delete it if they’re phishing. Click the website tab to view any link that you find in an email and utilize the info tab to find confirmed information about the companies that may be trying to contact you to see if they’re legit or not. Climb your way through the days, confirming that you are the ultimate anti phisher. Happy reading! <br/><br/>Dev team", {}, False))
         cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
