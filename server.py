@@ -71,6 +71,7 @@ class Game:
         'Trader Joe\'s': ('noreply@traderjoes.com',), #Trader Joe's is known to have very little email presence.
         'Local Grocery Store': ('orders@localgrocerystore.com', 'info@localgrocerystore.com') #Replace with a real local store
     }
+    todays_valid_emails: list[str] = []
     emails: list[Email] = [
         #Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing/n in park on tuesday!', {'fakeperson'}, True),
         #Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
@@ -103,12 +104,19 @@ class Game:
         if number_of_emails < 1:
             return []
 
+
+        cls.get_todays_valid_email_keys(cls.day)
+        todays_email_keys = cls.todays_valid_emails
+        todays_valid_emails = [email for key in todays_email_keys for email in cls.valid_emails[key]]
+        print(todays_valid_emails)
+
         senders = cls.get_todays_valid_email_keys(cls.day)
         print("Senders:", senders)
         senders_valid_emails = [cls.valid_emails[key][0] for key in senders]
         print("Senders valid emails:", senders_valid_emails)
         sender_emails = cls.create_input_emails(number_of_emails, senders_valid_emails)
         print("Sender emails:", sender_emails)
+
 
         emails = []
         fallback_email = Email(
@@ -201,6 +209,7 @@ class Game:
         print(valid_emails)
         todays_email_keys = rsample(valid_emails, number_of_emails)
         print(todays_email_keys)
+        cls.todays_valid_emails = todays_email_keys
         return todays_email_keys
 
 
@@ -283,6 +292,16 @@ def browser():
 def info():
     with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
     page = page.replace('DAYDAYDAYDAY', str(Game.day))
+
+    todays_valid_email_keys = []
+    for valid_email in Game.valid_emails:
+        for email_valid_today in Game.todays_valid_emails:
+            if email_valid_today == valid_email:
+                todays_valid_email_keys.append(', '.join(Game.valid_emails[valid_email]))
+                print(todays_valid_email_keys)
+    page = page.replace('EMAILSVALIDEMAILSVALID', '<p>\n</p><p>'.join(Game.todays_valid_emails[i] for i in range(0, len(Game.todays_valid_emails))) + '</p>')
+    page = page.replace('EMAILSVALIDKEYSEMAILSVALIDKEYS', '<p>\n</p><p>'.join(todays_valid_email_keys[i] for i in range(0, len(todays_valid_email_keys))) + '</p>')
+
     return page
 
 @route('/nextday')
