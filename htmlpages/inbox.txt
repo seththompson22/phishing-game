@@ -303,8 +303,8 @@
 
         <!-- Tabs -->
         <div class="tabs">
-            <div class="tab active" data-tab="email">
-                <span>Email</span>
+            <div class="tab active" data-tab="inbox">
+                <span>Inbox</span>
             </div>
             <div class="tab" data-tab="browser">
                 <span>Browser</span>
@@ -341,6 +341,25 @@
     </div>
 
     <script>
+        // Add tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+
+                // Add active class to the clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+
+                document.location.href = tabId;
+            });
+        });
+
         let bodies = {
             EMAILDICTEMAILDICTEMAILDICT
         }

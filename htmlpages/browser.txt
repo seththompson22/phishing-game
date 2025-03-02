@@ -36,7 +36,7 @@
         .title-bar .logo {
             width: 20px;
             height: 20px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggMUM0LjEgMSAxIDQuMSAxIDhzMy4xIDcgNyA3IDctMy4xIDctN1MxMS45IDEgOCAxem0wIDEzYy0zLjMgMC02LTIuNy02LTZzMi43LTYgNi02IDYgMi43IDYgNi0yLjcgNi02IDZ6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggM2MtMi44IDAtNSAyLjItNSA1czEuMiA1IDUgNSA1LTIuMiA1LTUtMi4yLTUtNS01em0wIDljLTIuMiAwLTQtMS44LTQtNHMxLjgtNCA0LTQgNCAxLjggNCA0LTEuOCA0LTQgNHoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNOCA5Yy0xLjcgMC0zIDEuMy0zIDNzMS4zIDMgMyAzIDMtMS4zIDMtMy0xLjMtMy0zLTN6Ii8+PC9zdmc+');
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggMUM0LjEgMSAxIDQuMSAxIDhzMy4xIDcgNyA3IDctMy4xIDctN1MxMS45IDEgOCAxem0wIDEzYy0zLjMgMC02LTIuNy02LTZzMi43LTYgNi02IDYgMi43IDYgNi0yLjcgNi02IDZ6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggM2MtMi44IDAtNSAyLjItNSA1czIuMiA1IDUgNSA1LTIuMiA1LTUtMi4yLTUtNS01em0wIDljLTIuMiAwLTQtMS44LTQtNHMxLjgtNCA0LTQgNCAxLjggNCA0LTEuOCA0LTQgNHoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNOCA5Yy0xLjcgMC0zIDEuMy0zIDNzMS4zIDMgMyAzIDMtMS4zIDMtMy0xLjMtMy0zLTN6Ii8+PC9zdmc+');
             background-size: cover;
             margin-right: 8px;
         }
@@ -131,6 +131,10 @@
             border-right: 1px solid #ccc;
         }
 
+        .tab:first-child {
+            border-top-left-radius: 8px; /* Rounded top-left corner for the first tab */
+        }
+
         .tab:last-child {
             border-right: none; /* Remove border for the last tab */
         }
@@ -156,16 +160,117 @@
             display: block;
         }
 
-        /* Empty text box styling */
-        .empty-text-box {
-            width: 100%;
-            height: 200px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        /* Email list styling */
+        .email-list {
+            margin-bottom: 20px;
+        }
+
+        .email {
+            display: flex;
+            align-items: center;
             padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            text-decoration: none; /* Remove underline from links */
+            color: inherit; /* Inherit text color */
+            cursor: pointer;
+        }
+
+        .email:hover {
+            background-color: #f9f9f9; /* Add hover effect */
+        }
+
+        .email-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px; /* Space between buttons */
+            margin-right: 10px; /* Space between buttons and email content */
+        }
+
+        .archive-button {
+            background-color: #27c93f; /* Green */
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .archive-button:hover {
+            background-color: #1f9e2f; /* Darker green on hover */
+        }
+
+        .delete-button {
+            background-color: #ff5f56; /* Red */
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .delete-button:hover {
+            background-color: #ff3b30; /* Darker red on hover */
+        }
+
+        .email-content {
+            flex-grow: 1;
+        }
+
+        .email-sender {
+            font-weight: bold;
+        }
+
+        .email-subject {
+            color: #555;
+        }
+
+        .email-preview {
+            color: #777;
             font-size: 14px;
-            color: #333;
-            background-color: #f9f9f9;
+        }
+
+        /* Email Preview Box */
+        .email-preview-box {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%; /* Takes up the bottom half of the screen */
+            background-color: #fff;
+            border-top: 1px solid #ccc;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+        .email-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .email-preview-content {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100% - 50px); /* Adjust height to fit remaining space */
+        }
+
+        #close-preview {
+            background-color: #ff5f56;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #close-preview:hover {
+            background-color: #ff3b30;
         }
     </style>
 </head>
@@ -189,24 +294,21 @@
             <button>Forward</button>
             <button>Refresh</button>
             <div class="address-bar">
-                <span>https://example.com/website</span>
+                <span>https://example.com/email</span>
                 <div class="goldfish-text">Goldfish : 0</div>
             </div>
         </div>
 
         <!-- Tabs -->
         <div class="tabs">
-            <div class="tab" data-tab="email">
-                <span>Email</span>
+            <div class="tab" data-tab="inbox">
+                <span>Inbox</span>
             </div>
-            <div class="tab active" data-tab="website">
-                <span>Website</span>
+            <div class="tab active" data-tab="browser">
+                <span>Browser</span>
             </div>
             <div class="tab" data-tab="info">
                 <span>Info</span>
-            </div>
-            <div class="tab" data-tab="settings">
-                <span>Settings</span>
             </div>
         </div>
 
@@ -222,9 +324,6 @@
             </div>
             <div id="info-tab" class="tab-content">
                 <p>Info content goes here.</p>
-            </div>
-            <div id="settings-tab" class="tab-content">
-                <p>Settings content goes here.</p>
             </div>
         </div>
     </div>
@@ -244,6 +343,8 @@
                 tab.classList.add('active');
                 const tabId = tab.getAttribute('data-tab');
                 document.getElementById(`${tabId}-tab`).classList.add('active');
+
+                document.location.href = tabId;
             });
         });
     </script>
