@@ -66,9 +66,10 @@
         <img src="img/phishmail.svg" alt="Logo">
         <h1>Phish Mail</h1> <!-- Updated game title -->
         <h2>Enter email to begin game</h2> <!-- Smaller and subtler prompt -->
-        <form id="loginForm">
-            <input type="email" id="email" placeholder="Enter your email" required="">
-            <input type="password" id="password" placeholder="Enter your password" required="">
+        <form id="loginForm" action="/save-username" method="post">
+            <input type="text" id="username" name="username" placeholder="Enter your username" required="">
+            <input type="email" id="email" name="email" placeholder="Enter your email" required="">
+            <input type="password" id="password" name="password" placeholder="Enter your password" required="">
             <button type="submit">Login</button>
         </form>
         <p class="reminder">Don't forget your log in!</p> <!-- Added reminder prompt -->

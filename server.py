@@ -1,4 +1,4 @@
-from bottle import route, run, static_file
+from bottle import route, run, static_file, request
 from random import shuffle
 from dataclasses import dataclass
 from gemini import generate_email_with_gemini
@@ -41,6 +41,7 @@ class Email:
 
 class Game:
     day: int = 0
+    name: str
     valid_emails: dict[str, tuple[str]] = {
         'Wells Fargo': ('alerts@wellsfargo.com',),
         'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org'),
@@ -71,9 +72,9 @@ class Game:
         'Local Grocery Store': ('orders@localgrocerystore.com', 'info@localgrocerystore.com') #Replace with a real local store
     }
     emails: list[Email] = [
-        Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing/n in park on tuesday!', {'fakeperson'}, True),
-        Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
-        Email('Carl Wheezer', 'carl@wheezer.ne', 'Excuse me', 'Can i have that croissant', {'fakeperson'}, True)
+        #Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing/n in park on tuesday!', {'fakeperson'}, True),
+        #Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
+        #Email('Carl Wheezer', 'carl@wheezer.ne', 'Excuse me', 'Can i have that croissant', {'fakeperson'}, True)
         # Email('Twilight Sparkle', 'tsparkle@mylittlepony.gov', 'Friendship', 'THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY <a href="givememoney.gov">donate today</a>THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY ', {'fakeperson'}, True),
     ]
 
@@ -121,7 +122,7 @@ class Game:
 
         try:
             raw_response = generate_email_with_gemini(
-                "John Smith", sender_emails, senders, len(sender_emails), "gemini-2.0-flash-lite", 
+                cls.name, sender_emails, senders, len(sender_emails), "gemini-2.0-flash-lite", 
             )
 
             if raw_response:
@@ -251,6 +252,16 @@ def index() -> str:
     with open('htmlpages/login.html') as file: page = ''.join(file.readlines())
     return page
 
+@route('/save_username', method='POST')
+def save_username():
+    ''' Save username '''
+    username = request.forms.get('username')
+    if username:
+        with open('username.txt', 'w') as file:
+            file.write(username)
+        Game.name = username  # Update Game.name
+        print(Game.name)
+    redirect('/inbox')
 
 @route('/inbox')
 def inbox():
@@ -280,6 +291,13 @@ def nextday():
     Game.generate_emails()
     return inbox()
 
+
+# Read the saved username from the file when the server starts
+try:
+    with open('username.txt', 'r') as file:
+        Game.name = file.read().strip()
+except FileNotFoundError:
+    Game.name = 'homeslice'  # Default username if the file does not exist
 
 # Generate emails for the game
 Game.generate_emails()
