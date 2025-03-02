@@ -277,7 +277,7 @@
     </style>
 </head>
 <body>
-    <div class="browser-window">
+    <div class="inbox-window">
         <!-- Title Bar -->
         <div class="title-bar">
             <div class="logo"></div>
@@ -296,7 +296,7 @@
             <button>Forward</button>
             <button>Refresh</button>
             <div class="address-bar">
-                <span>https://example.com/email</span>
+                <span>https://phishmail.gov/email</span>
                 <div class="goldfish-text">Goldfish : 0</div>
             </div>
         </div>
@@ -316,7 +316,7 @@
 
         <!-- Content -->
         <div class="content">
-            <div id="email-tab" class="tab-content active">
+            <div id="inbox-tab" class="tab-content active">
                 <div class="email-list">
                     EMAILSEMAILSEMAILSEMAILS
                 </div>
@@ -378,9 +378,11 @@
                 e.stopPropagation(); // Prevent the email link from being triggered
                 const email = button.closest('.email');
                 alert('Email archived!'); // Replace with actual archive logic
+            });
+        });
         let bodies = {
             EMAILDICTEMAILDICTEMAILDICT
-        }
+        };
         document.addEventListener('DOMContentLoaded', () => {
             // Add email preview functionality
             const emails = document.querySelectorAll('.email');

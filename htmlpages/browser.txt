@@ -294,7 +294,7 @@
             <button>Forward</button>
             <button>Refresh</button>
             <div class="address-bar">
-                <span>https://example.com/email</span>
+                <span>https://phishmail.gov/browser</span>
                 <div class="goldfish-text">Goldfish : 0</div>
             </div>
         </div>
@@ -319,7 +319,7 @@
                     <!-- Email content goes here -->
                 </div>
             </div>
-            <div id="website-tab" class="tab-content active">
+            <div id="browser-tab" class="tab-content active">
                 <textarea class="empty-text-box" placeholder="Enter your text here..." style="height: 821px; width: 1645px;"></textarea>
             </div>
             <div id="info-tab" class="tab-content">
