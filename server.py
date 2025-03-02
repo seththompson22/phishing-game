@@ -38,6 +38,9 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
+
+        cls.emails.append(cls.make_email()) # force phishing for day 1
+
         for _ in range(cls.day - 1): cls.emails.append(cls.make_email())
         shuffle(cls.emails)
     
@@ -76,11 +79,11 @@ class Game:
             is_phish=email_data["is_phish"]
         )
         print("Generated Email:", email)
+        print("Parsed JSON:", email_data_list)  # Print the parsed JSON data
         return email
-    
+
     @classmethod
     def new_address(cls) -> Email: ''' Gemini creates a random address.'''
-
 
 
 @route('/')
@@ -93,7 +96,7 @@ def index() -> str:
 @route('/inbox')
 def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
-    return page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
+    return page.replace('EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
 
 
 @route('/browser')
