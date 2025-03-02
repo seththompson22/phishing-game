@@ -75,7 +75,7 @@ class Game:
             address=email_data["address"],
             subject=email_data["subject"],
             body=email_data["body"],
-            checks=email_data["checks"],
+            flags=email_data["checks"],
             is_phish=email_data["is_phish"]
         )
         print("Generated Email:", email)
