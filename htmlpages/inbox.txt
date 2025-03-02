@@ -263,14 +263,11 @@
             <div class="tab active" data-tab="email">
                 <span>Email</span>
             </div>
-            <div class="tab" data-tab="website">
-                <span>Website</span>
+            <div class="tab" data-tab="browser">
+                <span>Browser</span>
             </div>
             <div class="tab" data-tab="info">
                 <span>Info</span>
-            </div>
-            <div class="tab" data-tab="settings">
-                <span>Settings</span>
             </div>
         </div>
 
@@ -278,43 +275,11 @@
         <div class="content">
             <div id="email-tab" class="tab-content active">
                 <div class="email-list">
-                    <a href="https://example.com/email/1" class="email">
-                        <div class="email-buttons">
-                            <button class="archive-button">Archive</button>
-                            <button class="delete-button">Delete</button>
-                        </div>
-                        <div class="email-content">
-                            <div class="email-sender">John Doe</div>
-                            <div class="email-subject">Meeting Reminder</div>
-                            <div class="email-preview">Don't forget our meeting at 10 AM tomorrow.</div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/email/2" class="email">
-                        <div class="email-buttons">
-                            <button class="archive-button">Archive</button>
-                            <button class="delete-button">Delete</button>
-                        </div>
-                        <div class="email-content">
-                            <div class="email-sender">Jane Smith</div>
-                            <div class="email-subject">Project Update</div>
-                            <div class="email-preview">Here's the latest update on the project.</div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/email/3" class="email">
-                        <div class="email-buttons">
-                            <button class="archive-button">Archive</button>
-                            <button class="delete-button">Delete</button>
-                        </div>
-                        <div class="email-content">
-                            <div class="email-sender">Support Team</div>
-                            <div class="email-subject">Your Ticket Has Been Resolved</div>
-                            <div class="email-preview">We've resolved your support ticket.</div>
-                        </div>
-                    </a>
+                    EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS
                 </div>
             </div>
-            <div id="website-tab" class="tab-content">
-                <p>Website content goes here.</p>
+            <div id="browser-tab" class="tab-content">
+                <p>Browser content goes here.</p>
             </div>
             <div id="info-tab" class="tab-content">
                 <p>Info content goes here.</p>
