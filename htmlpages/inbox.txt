@@ -316,7 +316,7 @@
 
         <!-- Content -->
         <div class="content">
-            <div id="email-tab" class="tab-content active">
+            <div id="inbox-tab" class="tab-content active">
                 <div class="email-list">
                     EMAILSEMAILSEMAILSEMAILS
                 </div>
