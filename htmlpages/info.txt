@@ -108,13 +108,6 @@
             align-items: center;
         }
 
-        .address-bar .goldfish-text {
-            margin-left: auto; /* Push "Goldfish : 0" to the far right */
-            font-size: 14px;
-            color: #333;
-            padding-left: 10px; /* Add some spacing */
-        }
-
         /* Style for the "Next Day" button */
         #next-day-button {
             margin-right: 10px; /* Add spacing between the button and the address bar */
@@ -314,7 +307,6 @@
             <button>Refresh</button>
             <div class="address-bar">
                 <span>https://phishmail.gov/info</span>
-                <div class="goldfish-text">Goldfish : 0</div>
             </div>
         </div>
 
@@ -371,13 +363,8 @@
         // Add "Next Day" button functionality
         document.addEventListener('DOMContentLoaded', () => {
             const nextDayButton = document.getElementById('next-day-button');
-            const dayText = document.querySelector('.title-bar .day-text');
-
-            let dayCounter = 0; // Initialize day counter
-
             nextDayButton.addEventListener('click', () => {
-                dayCounter++; // Increment the day counter
-                dayText.textContent = `Day ${dayCounter}`; // Update the day text
+                document.location.href = 'nextday';
             });
         });
     </script>

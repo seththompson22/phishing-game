@@ -85,7 +85,10 @@ class Game:
         cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
-    
+    @classmethod
+    def next_day(cls) -> None:
+        ''' Increases the day by 1 every time Next Day is clicked'''
+        cls.day += 1
 
     @classmethod
     def make_email_batch(cls, number_of_emails: int) -> list[Email]:
@@ -231,6 +234,13 @@ def info():
     with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
     page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
+
+@route('/nextday')
+def nextday():
+    Game.next_day()
+    Game.generate_emails()
+    return inbox()
+
 
 # Generate emails for the game
 Game.generate_emails()

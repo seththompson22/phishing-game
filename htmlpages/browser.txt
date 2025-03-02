@@ -363,13 +363,8 @@
         // Add "Next Day" button functionality
         document.addEventListener('DOMContentLoaded', () => {
             const nextDayButton = document.getElementById('next-day-button');
-            const dayText = document.querySelector('.title-bar .day-text');
-
-            let dayCounter = 0; // Initialize day counter
-
             nextDayButton.addEventListener('click', () => {
-                dayCounter++; // Increment the day counter
-                dayText.textContent = `Day ${dayCounter}`; // Update the day text
+                document.location.href = 'nextday';
             });
         });
     </script>
