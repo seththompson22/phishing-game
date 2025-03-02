@@ -2,7 +2,7 @@ from bottle import route, run, static_file
 from random import shuffle
 from dataclasses import dataclass
 from gemini import generate_email_with_gemini
-from random import randint, choice as rchoice
+from random import randint as rint, choice as rchoice, sample as rsample
 import json
 
 @dataclass
@@ -43,7 +43,32 @@ class Game:
     day: int = 0
     valid_emails: dict[str, tuple[str]] = {
         'Wells Fargo': ('alerts@wellsfargo.com',),
-        'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org')
+        'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org'),
+        'Amazon Orders': ('order-update@amazon.com', 'shipment@amazon.com'),
+        'LinkedIn Notifications': ('notifications-noreply@linkedin.com',),
+        'GitHub Updates': ('noreply@github.com',),
+        'Netflix Account': ('noreply@netflix.com', 'account@netflix.com'),
+        'Spotify Listeners': ('noreply@spotify.com',),
+        'Google Account': ('no-reply@accounts.google.com', 'security-alert@accounts.google.com'),
+        'Apple ID': ('appleid@id.apple.com',),
+        'Microsoft Account': ('account-security-noreply@accountprotection.microsoft.com',),
+        'Facebook Notifications': ('notification@facebookmail.com',),
+        'Twitter (X) Updates': ('noreply@mail.x.com',),
+        'Instagram Updates': ('mail@instagram.com',),
+        'Paypal Transactions': ('service@paypal.com', 'transaction@paypal.com'),
+        'Ebay Purchases': ('ebay@ebay.com',),
+        'Zoom Meetings': ('no-reply@zoom.us',),
+        'Slack Notifications': ('feedback@slack.com', 'notifications@slack.com'),
+        'Handshake Notifications': ('notifications@joinhandshake.com',),
+        'LinkedIn Messages': ('messages-noreply@linkedin.com',),
+        'Walmart Grocery': ('no-reply@walmartgrocery.com', 'orders@walmartgrocery.com'),
+        'Kroger Grocery': ('noreply@kroger.com', 'myaccount@kroger.com'),
+        'Aldi Grocery': ('noreply@aldi.us', 'feedback@aldi.us'),
+        'Target Grocery': ('targetgrocery@target.com', 'order@target.com'),
+        'Instacart': ('noreply@instacart.com', 'support@instacart.com'),
+        'Whole Foods Market': ('orders@wholefoodsmarket.com', 'noreply@wholefoodsmarket.com'),
+        'Trader Joe\'s': ('noreply@traderjoes.com',), #Trader Joe's is known to have very little email presence.
+        'Local Grocery Store': ('orders@localgrocerystore.com', 'info@localgrocerystore.com') #Replace with a real local store
     }
     emails: list[Email] = [
         Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
@@ -60,6 +85,8 @@ class Game:
         cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
+    
+
     @classmethod
     def make_email_batch(cls, number_of_emails: int) -> list[Email]:
         """Generates a batch of Email objects.
@@ -70,6 +97,10 @@ class Game:
         Returns:
             list[Email]: A list of Email objects.
         """
+
+        todays_email_keys = cls.get_todays_valid_email_keys(cls.day)
+        todays_valid_emails = [email for key in todays_email_keys for email in cls.valid_emails[key]]
+        print(todays_valid_emails)
 
         emails = []
         fallback_email = Email(
@@ -83,7 +114,7 @@ class Game:
 
         try:
             raw_response = generate_email_with_gemini(
-                "John Smith", ["support@company.com", "hr@company.com"], "gemini-2.0-flash-lite", number_of_emails
+                "John Smith", todays_valid_emails, "gemini-2.0-flash-lite", number_of_emails
             )
 
             if raw_response:
@@ -128,8 +159,43 @@ class Game:
         return emails
 
     @classmethod
-    def new_address(cls) -> Email: ''' Gemini creates a random address.'''
+    def spoofify_address(cls, email: Email) -> Email: 
+        ''' Gemini creates a random spoofed address.'''
 
+        parts = email.split('@')
+        if len(parts) != 2:
+            return email  # Return original if invalid format
+
+        local_part, domain = parts
+
+        # Common spoofing techniques:
+        methods = [
+            lambda lp, d: f"{lp}.{rint(1, 100)}@{d}",  # Add a dot and random number
+            lambda lp, d: f"{lp[1] if len(lp) > 1 else lp}{rchoice(['-', '_'])}update@{d}", # Add a - or _ followed by a word like update.
+            lambda lp, d: f"{lp}{rchoice(['.', '_', '-'])}{rchoice(['verify', 'alert', 'info'])}@{d}", # Add a separator and a common word
+            lambda lp, d: f"{lp}{rint(10, 99)}@{d}",  # Add a few digits
+            lambda lp, d: f"{lp.replace('o', '0').replace('l', '1')}@{d}",  # Common character replacements
+            lambda lp, d: f"{''.join(rsample(lp, len(lp)))}@{d}" if len(lp)>3 else f"{lp}@{d}", #Scramble the local part.
+            lambda lp, d: f"{lp}{rchoice(['.net', '.org', '.co'])}@{d.replace('.com', '')}{rchoice(['.net', '.org', '.co'])}", # Change TLDs
+            lambda lp, d: f"{lp}@{d.replace('.com', '.co')}" # change .com to .co
+        ]
+
+        method = rchoice(methods)
+        spoofed_email = method(local_part, domain)
+
+        return spoofed_email
+    
+    @classmethod
+    def get_todays_valid_email_keys(cls, number_of_emails: int) -> list[str]:
+        ''' Returns a list of [str, tuple(str)] for the day '''
+        # Get a random sample of valid emails
+        valid_emails = [email for email in cls.valid_emails.keys()]
+        print(valid_emails)
+        todays_email_keys = rsample(valid_emails, number_of_emails)
+        print(todays_email_keys)
+        return todays_email_keys
+
+    
 
 
 @route('/img/<filename>')
