@@ -378,9 +378,11 @@
                 e.stopPropagation(); // Prevent the email link from being triggered
                 const email = button.closest('.email');
                 alert('Email archived!'); // Replace with actual archive logic
+            });
+        });
         let bodies = {
             EMAILDICTEMAILDICTEMAILDICT
-        }
+        };
         document.addEventListener('DOMContentLoaded', () => {
             // Add email preview functionality
             const emails = document.querySelectorAll('.email');

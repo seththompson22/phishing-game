@@ -15,7 +15,7 @@ class Email:
     is_phish: bool
 
     def as_js_dict(self) -> str:
-        return '"SUB": "BODY"'.replace('SUB', self.subject).replace('BODY', self.body.replace('"', '\\"'))
+        return '"SUB": "BODY"'.replace('SUB', self.subject).replace('BODY', self.body.replace('"', '\\"')) 
 
     def as_html(self) -> str:
         preview = self.body
