@@ -314,7 +314,7 @@
 
         <!-- Content -->
         <div class="content">
-            <div id="email-tab" class="tab-content">
+            <div id="inbox-tab" class="tab-content">
                 <div class="email-list">
                     <!-- Email content goes here -->
                 </div>
@@ -344,6 +344,7 @@
                 const tabId = tab.getAttribute('data-tab');
                 document.getElementById(`${tabId}-tab`).classList.add('active');
 
+                console.log(tabId);
                 document.location.href = tabId;
             });
         });
