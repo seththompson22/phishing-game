@@ -219,6 +219,7 @@ def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
     page = page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
     page = page.replace('EMAILDICTEMAILDICTEMAILDICT', ',\n\t\t\t'.join(e.as_js_dict() for e in Game.emails))
+    page = page.replace('ISPHISHISPHISHISPHISH', ',\n\t\t\t'.join(f'"{e.subject}": true' if e.is_phish else f'"{e.subject}": false' for e in Game.emails))
     page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
 
