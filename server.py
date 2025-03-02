@@ -51,7 +51,7 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
-        cls.emails.append(cls.make_email_batch(cls.day))  # Generate a batch of emails
+        cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
     @classmethod
