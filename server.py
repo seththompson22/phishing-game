@@ -85,7 +85,10 @@ class Game:
         cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
-    
+    @classmethod
+    def next_day(cls) -> None:
+        ''' Increases the day by 1 every time Next Day is clicked'''
+        cls.day += 1
 
     @classmethod
     def make_email_batch(cls, number_of_emails: int) -> list[Email]:
@@ -255,19 +258,29 @@ def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
     page = page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
     page = page.replace('EMAILDICTEMAILDICTEMAILDICT', ',\n\t\t\t'.join(e.as_js_dict() for e in Game.emails))
-    page = page.replace('DAYDAYDAYDAY', str(Game.day));
+    page = page.replace('ISPHISHISPHISHISPHISH', ',\n\t\t\t'.join(f'"{e.subject}": true' if e.is_phish else f'"{e.subject}": false' for e in Game.emails))
+    page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
 
 @route('/browser')
 def browser():
     with open('htmlpages/browser.txt') as template: page = ''.join(template.readlines())
+    page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
 
 
 @route('/info')
 def info():
     with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
+    page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
+
+@route('/nextday')
+def nextday():
+    Game.next_day()
+    Game.generate_emails()
+    return inbox()
+
 
 # Generate emails for the game
 Game.generate_emails()

@@ -369,6 +369,8 @@
             });
         });
 
+        let isPhish = {ISPHISHISPHISHISPHISH};
+
         // Add delete functionality
         const deleteButtons = document.querySelectorAll('.delete-button');
         deleteButtons.forEach(button => {
@@ -376,7 +378,15 @@
                 e.preventDefault(); // Prevent the link from being triggered
                 e.stopPropagation(); // Prevent the email link from being triggered
                 const email = button.closest('.email');
-                // email.remove(); // Remove the email from the DOM
+                 const subject = email.querySelector('.email-content').querySelector('.email-subject');
+                if (isPhish[subject.innerText]) {
+                    alert("Correct! Keep Going!");
+                    email.remove(); 
+                }
+                else {
+                    alert("SILLY GOOSE!!! THAT WAS A REAL EMAIL!");
+                    email.remove();
+                }
             });
         });
 
@@ -387,50 +397,52 @@
                 e.preventDefault(); // Prevent the link from being triggered
                 e.stopPropagation(); // Prevent the email link from being triggered
                 const email = button.closest('.email');
-                alert('Email archived!'); // Replace with actual archive logic
+                const subject = email.querySelector('.email-content').querySelector('.email-subject');
+                if (isPhish[subject.innerText]) {
+                    alert("GAME OVER!!! THIS WAS A PHISH, YOU'VE BEEN PHISHED!");
+                    document.location.href = '/';
+                }
+                else {
+                    alert("Correct! Keep Going!");
+                    email.remove();
+                }
             });
         });
 
-        // Add "Next Day" button functionality
+       // Add "Next Day" button functionality
         document.addEventListener('DOMContentLoaded', () => {
             const nextDayButton = document.getElementById('next-day-button');
-            const dayText = document.querySelector('.title-bar .day-text');
-
-            let dayCounter = 0; // Initialize day counter
-
             nextDayButton.addEventListener('click', () => {
-                dayCounter++; // Increment the day counter
-                dayText.textContent = `Day ${'DAY'.repeat(dayCounter)}`; // Update the day text
+                document.location.href = 'nextday';
             });
+        });
+        // Add email preview functionality
+        const emails = document.querySelectorAll('.email');
+        const previewBox = document.getElementById('email-preview-box');
+        const previewSender = document.getElementById('preview-sender');
+        const previewSubject = document.getElementById('preview-subject');
+        const previewContent = document.getElementById('preview-content');
+        const closePreviewButton = document.getElementById('close-preview');
 
-            // Add email preview functionality
-            const emails = document.querySelectorAll('.email');
-            const previewBox = document.getElementById('email-preview-box');
-            const previewSender = document.getElementById('preview-sender');
-            const previewSubject = document.getElementById('preview-subject');
-            const previewContent = document.getElementById('preview-content');
-            const closePreviewButton = document.getElementById('close-preview');
+        emails.forEach(email => {
+            email.addEventListener('click', () => {
+                const sender = email.querySelector('.email-sender').textContent;
+                const subject = email.querySelector('.email-subject').textContent;
+                const preview = email.querySelector('.email-preview').textContent;
 
-            emails.forEach(email => {
-                email.addEventListener('click', () => {
-                    const sender = email.querySelector('.email-sender').textContent;
-                    const subject = email.querySelector('.email-subject').textContent;
-                    const preview = email.querySelector('.email-preview').textContent;
-
-                    // Populate the preview box
-                    previewSender.textContent = sender;
-                    previewSubject.textContent = subject;
-                    console.log(bodies[subject]);
-                    previewContent.textContent = bodies[subject];
-                    // Show the preview box
-                    previewBox.style.display = 'block';
-                });
+                // Populate the preview box
+                previewSender.textContent = sender;
+                previewSubject.textContent = subject;
+                console.log(bodies[subject]);
+                previewContent.textContent = bodies[subject];
+                // Show the preview box
+                previewBox.style.display = 'block';
             });
+        });
 
-            // Close the preview box
-            closePreviewButton.addEventListener('click', () => {
-                previewBox.style.display = 'none';
-            });
+        // Close the preview box
+        closePreviewButton.addEventListener('click', () => {
+            previewBox.style.display = 'none';
         });
 
         let bodies = {

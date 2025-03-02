@@ -1,4 +1,6 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internet Explorer Mockup</title>
@@ -36,7 +38,7 @@
         .title-bar .logo {
             width: 20px;
             height: 20px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggMUM0LjEgMSAxIDQuMSAxIDhzMy4xIDcgNyA3IDctMy4xIDctN1MxMS45IDEgOCAxem0wIDEzYy0zLjMgMC02LTIuNy02LTZzMi43LTYgNi02IDYgMi43IDYgNi0yLjcgNi02IDZ6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggM2MtMi44IDAtNSAyLjItNSA1czIuMiA1IDUgNSA1LTIuMiA1LTUtMi4yLTUtNS01em0wIDljLTIuMiAwLTQtMS44LTQtNHMxLjgtNCA0LTQgNCAxLjggNCA0LTEuOCA0LTQgNHoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNOCA5Yy0xLjcgMC0zIDEuMy0zIDNzMS4zIDMgMyAzIDMtMS4zIDMtMy0xLjMtMy0zLTN6Ii8+PC9zdmc+');
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggMUM0LjEgMSAxIDQuMSAxIDhzMy4xIDcgNyA3IDctMy4xIDctN1MxMS45IDEgOCAxem0wIDEzYy0zLjMgMC02LTIuNy02LTZzMi43LTYgNi02IDYgMi43IDYgNi0yLjcgNi02IDZ6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggM2MtMi44IDAtNSAyLjItNSA1czIuMiA1IDUgNSA1LTIuMiA1LTUtMi4yLTUtNS01em0wIDljLTIuMiAwLTQtMS44LTQtNHMxLjgtNCA0LTQgNCAxLjggNCA0LTEuOCA4LTQgNHoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNOCA5Yy0xLjcgMC0zIDEuMy0zIDNzMS4zIDMgMyAzIDMtMS4zIDMtMy0xLjMtMy0zLTN6Ii8+PC9zdmc+');
             background-size: cover;
             margin-right: 8px;
         }
@@ -48,7 +50,7 @@
         .title-bar .day-text {
             font-size: 14px;
             font-weight: normal;
-            position: absolute; /* Position "Day 1" in the center */
+            position: absolute; /* Position "Day DAYDAYDAYDAY" in the center */
             left: 50%;
             transform: translateX(-50%);
         }
@@ -106,11 +108,20 @@
             align-items: center;
         }
 
-        .address-bar .goldfish-text {
-            margin-left: auto; /* Push "Goldfish : 0" to the far right */
-            font-size: 14px;
-            color: #333;
-            padding-left: 10px; /* Add some spacing */
+        /* Style for the "Next Day" button */
+        #next-day-button {
+            margin-right: 10px; /* Add spacing between the button and the address bar */
+            padding: 5px 10px;
+            background-color: #0078d7; /* IE blue */
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        #next-day-button:hover {
+            background-color: #005bb5; /* Darker blue on hover */
         }
 
         /* Tabs styling */
@@ -280,7 +291,7 @@
         <div class="title-bar">
             <div class="logo"></div>
             <div class="title">Internet Explorer</div>
-            <div class="day-text">Day 1</div>
+            <div class="day-text">Day DAYDAYDAYDAY</div>
             <div class="window-controls">
                 <div class="window-control close"></div>
                 <div class="window-control minimize"></div>
@@ -290,12 +301,12 @@
 
         <!-- Toolbar -->
         <div class="toolbar">
+            <button id="next-day-button">Next Day</button> <!-- Added "Next Day" button -->
             <button>Back</button>
             <button>Forward</button>
             <button>Refresh</button>
             <div class="address-bar">
                 <span>https://phishmail.gov/browser</span>
-                <div class="goldfish-text">Goldfish : 0</div>
             </div>
         </div>
 
@@ -348,7 +359,14 @@
                 document.location.href = tabId;
             });
         });
+
+        // Add "Next Day" button functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const nextDayButton = document.getElementById('next-day-button');
+            nextDayButton.addEventListener('click', () => {
+                document.location.href = 'nextday';
+            });
+        });
     </script>
-
-
-</body></html>
+</body>
+</html>
