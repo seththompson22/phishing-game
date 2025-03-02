@@ -80,7 +80,6 @@ class Game:
     @classmethod
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
-        cls.emails.clear()
         cls.emails.append(Email('Dev Team', 'supercoolawesomepeople.gov', 'Helpful info', "Hello! Welcome to Phish Mail, the digital post office that tests your email expertise that increases in difficulty as time passes. The game is simple, read your inbox and determine if each email is fake or fact. Click an email, read it, and click the archive button if it’s real, or delete it if they’re phishing. Click the website tab to view any link that you find in an email and utilize the info tab to find confirmed information about the companies that may be trying to contact you to see if they’re legit or not. Climb your way through the days, confirming that you are the ultimate anti phisher. Happy reading! <br/><br/>Dev team", {}, False))
         cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
