@@ -51,7 +51,7 @@ class Game:
 @route('/')
 def index() -> str:
     ''' Loading page '''
-    with open('htmlpages/loading.html') as file: page = ''.join(file.readlines())
+    with open('htmlpages/login.html') as file: page = ''.join(file.readlines())
     return page
 
 
@@ -63,12 +63,14 @@ def inbox():
 
 @route('/browser')
 def browser():
-    return 'NEEDS IMPLEMENTATION'
+    with open('htmlpages/browser.txt') as template: page = ''.join(template.readlines())
+    return page
 
 
 @route('/info')
 def info():
-    return 'NEEDS IMPLEMENTATION'
+    with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
+    return page
 
 
 
