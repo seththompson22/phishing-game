@@ -41,6 +41,11 @@ class Game:
         Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
         # Email('Twilight Sparkle', 'tsparkle@mylittlepony.gov', 'Friendship', 'THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY <a href="givememoney.gov">donate today</a>THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY ', {'fakeperson'}, True),
     ]
+    
+    @classmethod 
+    def new_day(cls) -> None:
+        '''Every day a day passes, the day increases by one'''
+        day += 1
 
     @classmethod
     def generate_emails(cls) -> None:
