@@ -3,14 +3,15 @@ import google.generativeai as genai
 import os
 import json
 from dotenv import load_dotenv
+from random import randint as rint, sample as rsample
 
 # Load environment variables
 load_dotenv()
 genai.configure(api_key=os.getenv("API_KEY"))
 
-def generate_email_with_gemini(user_name, acceptable_emails, model_name, num_responses):
+def generate_email_with_gemini(user_name: str, sender_emails: list[str], num_senders: int, acceptable_senders: list[str], model_name: str):
     """
-    Generates {num_responses} phishing email(s) using Google's Generative AI (Gemini).
+    Generates {num_senders} email(s) using Google's Generative AI (Gemini).
 
     Args:
         user_name (str): The name of the user to personalize the email.
@@ -26,7 +27,7 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name, num_res
             You are tasked with generating example emails for a cybersecurity awareness game that teaches users how to identify scam emails. The emails should include both **legitimate and suspicious** examples to help users learn to recognize cybersecurity threats.  
 
             ### Instructions:  
-            - Generate **{num_responses}** email(s) that vary between suspicious and legitimate emails.  
+            - Generate **{num_senders}** email(s) that vary between suspicious and legitimate emails.  
             - Separate each email with the '|' character.  
             - Structure each email using the format:  
 
@@ -40,6 +41,7 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name, num_res
             - Should resemble normal, professional communication without deceptive elements.  
             3. **Important**
             - at the end of each email say that this is for educational purposes only
+            4. Increase length of the emails to 3-4 sentences. Fill in the user name with {user_name} and the sender email with the according {acceptable_senders} based on the {sender_emails}
 
             ### Examples:  
             IT Support|it@company.com|Password Reset Required|Dear User, reset here: fake-reset.com|high|high|any|suspicious|true  
@@ -47,8 +49,10 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name, num_res
 
             ### Context:  
             - User Name: {user_name}  
-            - Acceptable Emails: {acceptable_emails}  
-            - Ensure a mix of **realistic phishing and non-phishing** emails for training purposes.  
+            - Acceptable Emails: {acceptable_senders}  
+            - Ensure a mix of **realistic phishing and non-phishing** emails for training purposes. 
+            - if the second value in the tuple within {sender_emails} is "phishing", then make a **realistic non-phishing email**, otherwise make a **realistic phishing email**,
+            - Use the following sender emails: {sender_emails}, and fill in the information you generate in brackets with realistic values.
             """
 
 
