@@ -36,6 +36,10 @@ class Email:
 
 class Game:
     day: int = 1
+    valid_emails: dict[str, tuple[str]] = {
+        'Wells Fargo': ('alerts@wellsfargo.com',),
+        'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org')
+    }
     emails: list[Email] = [
         Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
         Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),

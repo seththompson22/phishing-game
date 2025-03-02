@@ -359,7 +359,25 @@
                 document.location.href = tabId;
             });
         });
+         // Add delete functionality
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent the link from being triggered
+                e.stopPropagation(); // Prevent the email link from being triggered
+                const email = button.closest('.email');
+                // email.remove(); // Remove the email from the DOM
+            });
+        });
 
+        // Add archive functionality
+        const archiveButtons = document.querySelectorAll('.archive-button');
+        archiveButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent the link from being triggered
+                e.stopPropagation(); // Prevent the email link from being triggered
+                const email = button.closest('.email');
+                alert('Email archived!'); // Replace with actual archive logic
         let bodies = {
             EMAILDICTEMAILDICTEMAILDICT
         }
