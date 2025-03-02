@@ -1,14 +1,17 @@
 from bottle import route, run
-from emails import Email
 from random import shuffle
 from dataclasses import dataclass
+from gemini import generate_email_with_gemini
+import json
 
 @dataclass
 class Email:
     name: str
-    domain: str
+    address: str
     subject: str
     body: str
+    checks: dict
+    is_phish: bool
 
 class Game:
     day: int = 1
@@ -19,18 +22,58 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
-        for _ in range(cls.day): cls.emails.append(cls.make_email())
+        for _ in range(cls.day):
+            cls.emails.append(cls.make_email())
         shuffle(cls.emails)
     
     @classmethod
-    def make_email(cls) -> Email: ''' Placeholder for function to return an email. '''
+    def make_email(cls) -> Email: 
+        ''' Generates an email using Gemini and returns an Email object. '''
+        # Call the Gemini function to generate an email
+        user_name = "John Smith"  # Replace with dynamic data if needed
+        acceptable_emails = ["support@company.com", "hr@company.com"]  # Replace with your list
+        model_name = "gemini-1.5-flash"  # Replace with your model name
+
+        raw_response = generate_email_with_gemini(user_name, acceptable_emails, model_name)
+
+        # Step 1: Remove the Markdown code block markers (if present)
+        cleaned_response = raw_response.strip("```json\n").rstrip("```").strip()
+
+        # Step 2: Parse the cleaned JSON
+        try:
+            email_data_list = json.loads(cleaned_response)  # This is a list of dictionaries
+            print("Parsed JSON:", email_data_list)
+
+            # Select the first email from the list
+            email_data = email_data_list[0]  # Select the first dictionary
+        except (json.JSONDecodeError, IndexError) as e:
+            print("Failed to parse JSON or select email:", e)
+            print("Raw Response:", raw_response)
+            raise e  # Re-raise the exception to stop further execution
+
+        # Create an instance of the Email class
+        email = Email(
+            name=email_data["name"],
+            address=email_data["address"],
+            subject=email_data["subject"],
+            body=email_data["body"],
+            checks=email_data["checks"],
+            is_phish=email_data["is_phish"]
+        )
+        print("Generated Email:", email)
+        return email
 
 
 @route('/')
-def index() -> str: return hello('homeslice@phishmail.com')
+def index() -> str:
+    return hello('homeslice@phishmail.com')
 
 @route('/hello/<name>')
 def hello(name):
     return f'Hello {name}!'
 
+# Generate emails for the game
+Game.generate_emails()
+
+# Run the server
 run(host='localhost', port=8080, debug=True)

@@ -1,0 +1,135 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+#browser {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    background: #333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#tabs {
+    display: flex;
+    background: #282828;
+    padding: 10px;
+}
+
+#tabs button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #ddd;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#tabs button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+#inbox-emails {
+    flex: 2;
+    overflow-y: auto;
+}
+
+#email-preview-section {
+    flex: 1;
+    background: #444;
+    border-top: 1px solid #555;
+    padding: 10px;
+    display: block;
+}
+
+.email-preview-placeholder {
+    text-align: center;
+    font-style: italic;
+    color: #777;
+}
+
+.email-preview {
+    background: #444;
+    border: 1px solid #555;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+}
+
+.email-preview.selected {
+    background-color: #555;
+    border-color: #777;
+}
+
+.email-full {
+    display: none;
+    background: #444;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.email-full.active {
+    display: block;
+}
+
+.email-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.email-body {
+    margin-bottom: 5px;
+}
+
+.email-actions button {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.email-actions button:hover {
+    background: #b71c1c;
+}
+
+.from-aligned {
+    text-align: left;
+}
+
+.email-timestamp {
+    font-size: 0.8em;
+    color: #aaa;
+}
