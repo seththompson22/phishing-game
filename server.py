@@ -1,4 +1,4 @@
-from bottle import route, run
+from bottle import route, run, static_file
 from random import shuffle
 from dataclasses import dataclass
 from gemini import generate_email_with_gemini
@@ -14,12 +14,15 @@ class Email:
     flags: dict[str, str]
     is_phish: bool
 
+    def as_js_dict(self) -> str:
+        return '"SUB": "BODY"'.replace('SUB', self.subject).replace('BODY', self.body.replace('"', '\\"'))
+
     def as_html(self) -> str:
         preview = self.body
         for punc in ('.', '!', '?'):
             if punc in preview: preview = preview[0:preview.index(punc)]
         return f"""
-<a href="https://example.com/email/2" class="email">
+<div class="email">
     <div class="email-buttons">
         <button class="archive-button">Archive</button>
         <button class="delete-button">Delete</button>
@@ -29,12 +32,20 @@ class Email:
         <div class="email-subject">{self.subject}</div>
         <div class="email-preview">{preview}...</div>
     </div>
-</a>"""
+</div>"""
 
 class Game:
     day: int = 1
-    emails: list[Email] = [Email('waluigi', 'waluigi@nintendo.com', 'free waluigi games', 'WAH. WAH WAH WAH WAH WAH WAH WAH WAH WAH. WAHWFAWFAWOFAORNWAORNONAWROAWJEDNAWON', {}, True)]
-    times_phished: int = 0
+    valid_emails: dict[str, tuple[str]] = {
+        'Wells Fargo': ('alerts@wellsfargo.com',),
+        'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org')
+    }
+    emails: list[Email] = [
+        Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
+        Email('Wario', 'wario@nintendo.com', 'She WAH', 'Now I\'m gonna wah with you, you have no choice in the matter.', {'fakeperson'}, True),
+        Email('Carl Wheezer', 'carl@wheezer.ne', 'Excuse me', 'Can i have that croissant', {'fakeperson'}, True)
+        # Email('Twilight Sparkle', 'tsparkle@mylittlepony.gov', 'Friendship', 'THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY <a href="givememoney.gov">donate today</a>THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY ', {'fakeperson'}, True),
+    ]
 
     @classmethod
     def generate_emails(cls) -> None:
@@ -114,6 +125,12 @@ class Game:
     def new_address(cls) -> Email: ''' Gemini creates a random address.'''
 
 
+@route('/img/<filename>')
+def server_static(filename) -> str:
+     ''' Get images '''
+     return static_file(filename, root='images/')
+
+
 @route('/')
 def index() -> str:
     ''' Loading page '''
@@ -124,7 +141,9 @@ def index() -> str:
 @route('/inbox')
 def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
-    return page.replace('EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
+    page = page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
+    page = page.replace('EMAILDICTEMAILDICTEMAILDICT', ',\n\t\t\t'.join(e.as_js_dict() for e in Game.emails))
+    return page
 
 
 @route('/browser')
