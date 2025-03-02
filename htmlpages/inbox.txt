@@ -263,8 +263,8 @@
             <div class="tab active" data-tab="email">
                 <span>Email</span>
             </div>
-            <div class="tab" data-tab="website">
-                <span>Website</span>
+            <div class="tab" data-tab="browser">
+                <span>Browser</span>
             </div>
             <div class="tab" data-tab="info">
                 <span>Info</span>
@@ -278,8 +278,8 @@
                     EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS
                 </div>
             </div>
-            <div id="website-tab" class="tab-content">
-                <p>Website content goes here.</p>
+            <div id="browser-tab" class="tab-content">
+                <p>Browser content goes here.</p>
             </div>
             <div id="info-tab" class="tab-content">
                 <p>Info content goes here.</p>
