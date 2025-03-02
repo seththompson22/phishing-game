@@ -35,7 +35,7 @@ class Email:
 </div>"""
 
 class Game:
-    day: int = 5
+    day: int = 0
     valid_emails: dict[str, tuple[str]] = {
         'Wells Fargo': ('alerts@wellsfargo.com',),
         'Carl Weezer': ('weezing@carl.com', 'carl@wheezer.org'),
