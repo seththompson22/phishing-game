@@ -275,7 +275,7 @@
         <div class="content">
             <div id="email-tab" class="tab-content active">
                 <div class="email-list">
-                    EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS
+                    EMAILSEMAILSEMAILSEMAILS
                 </div>
             </div>
             <div id="browser-tab" class="tab-content">
@@ -315,7 +315,7 @@
                 e.preventDefault(); // Prevent the link from being triggered
                 e.stopPropagation(); // Prevent the email link from being triggered
                 const email = button.closest('.email');
-                email.remove(); // Remove the email from the DOM
+                // email.remove(); // Remove the email from the DOM
             });
         });
 
