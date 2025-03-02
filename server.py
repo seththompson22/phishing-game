@@ -36,7 +36,6 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
-
         for _ in range(cls.day - 1): cls.emails.append(cls.make_email())
         shuffle(cls.emails)
     
@@ -58,7 +57,7 @@ def index() -> str:
 @route('/inbox')
 def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
-    return page.replace('EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
+    return page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
 
 
 @route('/browser')
