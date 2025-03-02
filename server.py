@@ -38,11 +38,12 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
+        cls.emails.append(cls.make_email()) # force phishing
         for _ in range(cls.day - 1): cls.emails.append(cls.make_email())
         shuffle(cls.emails)
     
     @classmethod
-    def make_email(cls) -> Email: 
+    def make_email(cls) -> Email:
         ''' Generates an email using Gemini and returns an Email object. '''
         # Call the Gemini function to generate an email
         user_name = "John Smith"  # Replace with dynamic data if needed
@@ -110,7 +111,7 @@ def info():
 
 
 # Generate emails for the game
-Game.generate_emails()
+# Game.generate_emails()
 
 # Run the server
 run(host='localhost', port=8080, debug=True)

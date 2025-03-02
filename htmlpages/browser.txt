@@ -131,10 +131,6 @@
             border-right: 1px solid #ccc;
         }
 
-        .tab:first-child {
-            border-top-left-radius: 8px; /* Rounded top-left corner for the first tab */
-        }
-
         .tab:last-child {
             border-right: none; /* Remove border for the last tab */
         }
