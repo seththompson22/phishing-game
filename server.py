@@ -99,10 +99,15 @@ class Game:
         Returns:
             list[Email]: A list of Email objects.
         """
+        if number_of_emails < 1:
+            return []
 
-        todays_email_keys = cls.get_todays_valid_email_keys(cls.day)
-        todays_valid_emails = [email for key in todays_email_keys for email in cls.valid_emails[key]]
-        print(todays_valid_emails)
+        senders = cls.get_todays_valid_email_keys(cls.day)
+        print("Senders:", senders)
+        senders_valid_emails = [cls.valid_emails[key][0] for key in senders]
+        print("Senders valid emails:", senders_valid_emails)
+        sender_emails = cls.create_input_emails(number_of_emails, senders_valid_emails)
+        print("Sender emails:", sender_emails)
 
         emails = []
         fallback_email = Email(
@@ -116,7 +121,7 @@ class Game:
 
         try:
             raw_response = generate_email_with_gemini(
-                "John Smith", todays_valid_emails, "gemini-2.0-flash-lite", number_of_emails
+                "John Smith", sender_emails, senders, len(sender_emails), "gemini-2.0-flash-lite", 
             )
 
             if raw_response:
@@ -197,6 +202,40 @@ class Game:
         print(todays_email_keys)
         return todays_email_keys
 
+
+    @classmethod
+    def create_input_emails(cls, num_emails: int, emails: list[str]) -> list[str]:
+        ''' Returns a list of emails [str] for the day, with p phishing and n non-phishing '''
+        if num_emails < 1:
+            return []
+        if num_emails == 1:
+            p = 1
+            n = 0
+        else:
+            p = rint(1, min(num_emails, cls.day))  # Ensure p is between 1 and the minimum of num_emails and cls.day
+            n = rint(0, cls.day - 1)  # Ensure n is between 0 and cls.day - 1
+
+        p_to_change = rsample(emails, p)
+        phishing_emails = []
+        non_phishing_emails = [email for email in emails if email not in p_to_change]
+
+        for email in p_to_change:
+            if rint(1, 100) <= 70:  # 70% chance to spoofify the email
+                phishing_emails.append(cls.spoofify_address(email))
+            else:
+                phishing_emails.append(email)
+            print(f"Phishing email: {email}")
+
+        print(f"Non-phishing emails: {non_phishing_emails}")
+
+        final_stuff = []
+        for email in non_phishing_emails:
+            final_stuff.append((email, "non_phishing"))
+        for email in phishing_emails:
+            final_stuff.append((email, "phishing"))
+
+        print(final_stuff)
+        return final_stuff
     
 
 
