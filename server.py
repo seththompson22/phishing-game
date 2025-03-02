@@ -2,6 +2,7 @@ from bottle import route, run
 from random import shuffle
 from dataclasses import dataclass
 from gemini import generate_email_with_gemini
+from random import randint, choice as rchoice
 import json
 
 @dataclass
@@ -15,7 +16,8 @@ class Email:
 
     def as_html(self) -> str:
         preview = self.body
-        if '.' in preview: preview = preview[0:preview.index('.')]
+        for punc in ('.', '!', '?'):
+            if punc in preview: preview = preview[0:preview.index(punc)]
         return f"""
 <a href="https://example.com/email/2" class="email">
     <div class="email-buttons">
@@ -45,6 +47,15 @@ class Game:
     @classmethod
     def make_email(cls) -> Email:
         ''' Generates an email using Gemini and returns an Email object. '''
+        # check if returned email should be hardcoded or generated
+        if not randint(0, 99):
+            return rchoice([  # random email
+                Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
+                Email('Wario', 'wario@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
+                Email('Twilight Sparkle', 'tsparkle@mylittlepony.gov', 'Friendship', 'THE POWER OF FRIENDSHIP COMPELS YOU', {'fakeperson'}, True),
+                ## Add more emails
+            ])
+
         # Call the Gemini function to generate an email
         user_name = "John Smith"  # Replace with dynamic data if needed
         acceptable_emails = ["support@company.com", "hr@company.com"]  # Replace with your list
