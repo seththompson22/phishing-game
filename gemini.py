@@ -54,7 +54,7 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name):
                 "body": "Dear {user_name}, please reset your password here: fake.com",
                 "checks": {{
                     "grammar": "low",
-                    "spelling": "low",
+                    "spelling": "high",
                     "time": "any",
                     "links": "suspicious"
                 }},
