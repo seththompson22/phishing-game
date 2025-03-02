@@ -341,6 +341,9 @@
     </div>
 
     <script>
+        let bodies = {
+            EMAILDICTEMAILDICTEMAILDICT
+        }
         document.addEventListener('DOMContentLoaded', () => {
             // Add email preview functionality
             const emails = document.querySelectorAll('.email');
@@ -359,7 +362,8 @@
                     // Populate the preview box
                     previewSender.textContent = sender;
                     previewSubject.textContent = subject;
-                    previewContent.textContent = preview;
+                    console.log(bodies[subject]);
+                    previewContent.textContent = bodies[subject];
 
                     // Show the preview box
                     previewBox.style.display = 'block';
