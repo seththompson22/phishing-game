@@ -19,7 +19,7 @@ class Email:
         for punc in ('.', '!', '?'):
             if punc in preview: preview = preview[0:preview.index(punc)]
         return f"""
-<a href="https://example.com/email/2" class="email">
+<div class="email">
     <div class="email-buttons">
         <button class="archive-button">Archive</button>
         <button class="delete-button">Delete</button>
@@ -29,7 +29,7 @@ class Email:
         <div class="email-subject">{self.subject}</div>
         <div class="email-preview">{preview}...</div>
     </div>
-</a>"""
+</div>"""
 
 class Game:
     day: int = 1
@@ -105,7 +105,7 @@ def index() -> str:
 @route('/inbox')
 def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
-    return page.replace('EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
+    return page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
 
 
 @route('/browser')

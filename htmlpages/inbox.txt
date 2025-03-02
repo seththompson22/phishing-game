@@ -318,28 +318,7 @@
         <div class="content">
             <div id="email-tab" class="tab-content active">
                 <div class="email-list">
-                    <div class="email">
-                        <div class="email-buttons">
-                            <button class="archive-button">Archive</button>
-                            <button class="delete-button">Delete</button>
-                        </div>
-                        <div class="email-content">
-                            <div class="email-sender">John Doe</div>
-                            <div class="email-subject">Meeting Reminder</div>
-                            <div class="email-preview">Don't forget the meeting at 3 PM today.</div>
-                        </div>
-                    </div>
-                    <div class="email">
-                        <div class="email-buttons">
-                            <button class="archive-button">Archive</button>
-                            <button class="delete-button">Delete</button>
-                        </div>
-                        <div class="email-content">
-                            <div class="email-sender">Jane Smith</div>
-                            <div class="email-subject">Project Update</div>
-                            <div class="email-preview">Here's the latest update on the project.</div>
-                        </div>
-                    </div>
+                    EMAILSEMAILSEMAILSEMAILS
                 </div>
             </div>
             <div id="browser-tab" class="tab-content">
