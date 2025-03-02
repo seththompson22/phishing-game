@@ -1,4 +1,6 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internet Explorer Mockup</title>
@@ -48,7 +50,7 @@
         .title-bar .day-text {
             font-size: 14px;
             font-weight: normal;
-            position: absolute; /* Position "Day 1" in the center */
+            position: absolute; /* Position "Day DAYDAYDAYDAY" in the center */
             left: 50%;
             transform: translateX(-50%);
         }
@@ -111,6 +113,22 @@
             font-size: 14px;
             color: #333;
             padding-left: 10px; /* Add some spacing */
+        }
+
+        /* Style for the "Next Day" button */
+        #next-day-button {
+            margin-right: 10px; /* Add spacing between the button and the address bar */
+            padding: 5px 10px;
+            background-color: #0078d7; /* IE blue */
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        #next-day-button:hover {
+            background-color: #005bb5; /* Darker blue on hover */
         }
 
         /* Tabs styling */
@@ -280,7 +298,7 @@
         <div class="title-bar">
             <div class="logo"></div>
             <div class="title">Internet Explorer</div>
-            <div class="day-text">Day 1</div>
+            <div class="day-text">Day DAYDAYDAYDAY</div>
             <div class="window-controls">
                 <div class="window-control close"></div>
                 <div class="window-control minimize"></div>
@@ -290,6 +308,7 @@
 
         <!-- Toolbar -->
         <div class="toolbar">
+            <button id="next-day-button">Next Day</button> <!-- Added "Next Day" button -->
             <button>Back</button>
             <button>Forward</button>
             <button>Refresh</button>
@@ -348,7 +367,19 @@
                 document.location.href = tabId;
             });
         });
+
+        // Add "Next Day" button functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const nextDayButton = document.getElementById('next-day-button');
+            const dayText = document.querySelector('.title-bar .day-text');
+
+            let dayCounter = 0; // Initialize day counter
+
+            nextDayButton.addEventListener('click', () => {
+                dayCounter++; // Increment the day counter
+                dayText.textContent = `Day ${dayCounter}`; // Update the day text
+            });
+        });
     </script>
-
-
-</body></html>
+</body>
+</html>

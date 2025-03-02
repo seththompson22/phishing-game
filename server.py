@@ -216,18 +216,20 @@ def inbox():
     with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
     page = page.replace('EMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
     page = page.replace('EMAILDICTEMAILDICTEMAILDICT', ',\n\t\t\t'.join(e.as_js_dict() for e in Game.emails))
-    page = page.replace('DAYDAYDAYDAY', str(Game.day));
+    page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
 
 @route('/browser')
 def browser():
     with open('htmlpages/browser.txt') as template: page = ''.join(template.readlines())
+    page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
 
 
 @route('/info')
 def info():
     with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
+    page = page.replace('DAYDAYDAYDAY', str(Game.day))
     return page
 
 # Generate emails for the game
