@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Explorer Mockup</title>
+    <style>
+        /* Reset default margin and padding */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Prevent scrolling */
+            font-family: Arial, sans-serif;
+        }
+
+        /* Make the browser window fill the entire screen */
+        .browser-window {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Title bar styling (Internet Explorer-like) */
+        .title-bar {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            background-color: #0078d7; /* IE blue */
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            -webkit-app-region: drag; /* Allow dragging (for Electron-like apps) */
+        }
+
+        .title-bar .logo {
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggMUM0LjEgMSAxIDQuMSAxIDhzMy4xIDcgNyA3IDctMy4xIDctN1MxMS45IDEgOCAxem0wIDEzYy0zLjMgMC02LTIuNy02LTZzMi43LTYgNi02IDYgMi43IDYgNi0yLjcgNi02IDZ6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTggM2MtMi44IDAtNSAyLjItNSA1czIuMiA1IDUgNSA1LTIuMiA1LTUtMi4yLTUtNS01em0wIDljLTIuMiAwLTQtMS44LTQtNHMxLjgtNCA0LTQgNCAxLjggNCA0LTEuOCA0LTQgNHoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNOCA5Yy0xLjcgMC0zIDEuMy0zIDNzMS4zIDMgMyAzIDMtMS4zIDMtMy0xLjMtMy0zLTN6Ii8+PC9zdmc+');
+            background-size: cover;
+            margin-right: 8px;
+        }
+
+        .title-bar .title {
+            margin-right: auto; /* Push "Internet Explorer" to the left */
+        }
+
+        .title-bar .day-text {
+            font-size: 14px;
+            font-weight: normal;
+            position: absolute; /* Position "Day 1" in the center */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .title-bar .window-controls {
+            display: flex;
+            gap: 5px;
+            margin-left: auto; /* Push window controls to the right */
+        }
+
+        .title-bar .window-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .title-bar .window-control.close { background-color: #ff5f56; }
+        .title-bar .window-control.minimize { background-color: #ffbd2e; }
+        .title-bar .window-control.maximize { background-color: #27c93f; }
+
+        /* Toolbar styling (Internet Explorer-like) */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            background-color: #f0f0f0; /* IE gray */
+            border-bottom: 1px solid #ccc;
+        }
+
+        .toolbar button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 4px; /* Rounded edges */
+        }
+
+        .toolbar button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .address-bar {
+            flex-grow: 1;
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .address-bar .goldfish-text {
+            margin-left: auto; /* Push "Goldfish : 0" to the far right */
+            font-size: 14px;
+            color: #333;
+            padding-left: 10px; /* Add some spacing */
+        }
+
+        /* Tabs styling */
+        .tabs {
+            display: flex;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .tab {
+            flex: 1; /* Evenly space tabs */
+            padding: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            background-color: #f0f0f0;
+            text-align: center;
+            border-right: 1px solid #ccc;
+        }
+
+        .tab:first-child {
+            border-top-left-radius: 8px; /* Rounded top-left corner for the first tab */
+        }
+
+        .tab:last-child {
+            border-right: none; /* Remove border for the last tab */
+        }
+
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 2px solid #0078d7;
+        }
+
+        /* Content area styling */
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto; /* Allow scrolling for content */
+            background-color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Email list styling */
+        .email-list {
+            margin-bottom: 20px;
+        }
+
+        .email {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            text-decoration: none; /* Remove underline from links */
+            color: inherit; /* Inherit text color */
+        }
+
+        .email:hover {
+            background-color: #f9f9f9; /* Add hover effect */
+        }
+
+        .email-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px; /* Space between buttons */
+            margin-right: 10px; /* Space between buttons and email content */
+        }
+
+        .archive-button {
+            background-color: #27c93f; /* Green */
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .archive-button:hover {
+            background-color: #1f9e2f; /* Darker green on hover */
+        }
+
+        .delete-button {
+            background-color: #ff5f56; /* Red */
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .delete-button:hover {
+            background-color: #ff3b30; /* Darker red on hover */
+        }
+
+        .email-content {
+            flex-grow: 1;
+        }
+
+        .email-sender {
+            font-weight: bold;
+        }
+
+        .email-subject {
+            color: #555;
+        }
+
+        .email-preview {
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="browser-window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="logo"></div>
+            <div class="title">Internet Explorer</div>
+            <div class="day-text">Day 1</div>
+            <div class="window-controls">
+                <div class="window-control close"></div>
+                <div class="window-control minimize"></div>
+                <div class="window-control maximize"></div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <button>Back</button>
+            <button>Forward</button>
+            <button>Refresh</button>
+            <div class="address-bar">
+                <span>https://example.com/email</span>
+                <div class="goldfish-text">Goldfish : 0</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="email">
+                <span>Email</span>
+            </div>
+            <div class="tab" data-tab="browser">
+                <span>Browser</span>
+            </div>
+            <div class="tab" data-tab="info">
+                <span>Info</span>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div id="email-tab" class="tab-content active">
+                <div class="email-list">
+                    EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS
+                </div>
+            </div>
+            <div id="browser-tab" class="tab-content">
+                <p>Browser content goes here.</p>
+            </div>
+            <div id="info-tab" class="tab-content">
+                <p>Info content goes here.</p>
+            </div>
+            <div id="settings-tab" class="tab-content">
+                <p>Settings content goes here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+
+                // Add active class to the clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Add delete functionality
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent the link from being triggered
+                e.stopPropagation(); // Prevent the email link from being triggered
+                const email = button.closest('.email');
+                email.remove(); // Remove the email from the DOM
+            });
+        });
+
+        // Add archive functionality
+        const archiveButtons = document.querySelectorAll('.archive-button');
+        archiveButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent the link from being triggered
+                e.stopPropagation(); // Prevent the email link from being triggered
+                const email = button.closest('.email');
+                alert('Email archived!'); // Replace with actual archive logic
+            });
+        });
+    </script>
+</body>
+</html>

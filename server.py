@@ -10,12 +10,28 @@ class Email:
     address: str
     subject: str
     body: str
-    checks: dict
+    flags: dict[str, str]
     is_phish: bool
+
+    def as_html(self) -> str:
+        preview = self.body
+        if '.' in preview: preview = preview[0:preview.index('.')]
+        return f"""
+<a href="https://example.com/email/2" class="email">
+    <div class="email-buttons">
+        <button class="archive-button">Archive</button>
+        <button class="delete-button">Delete</button>
+    </div>
+    <div class="email-content">
+        <div class="email-sender">{self.name} | {self.address}</div>
+        <div class="email-subject">{self.subject}</div>
+        <div class="email-preview">{preview}...</div>
+    </div>
+</a>"""
 
 class Game:
     day: int = 1
-    emails: list[Email] = []
+    emails: list[Email] = [Email('waluigi', 'waluigi@nintendo.com', 'free waluigi games', 'WAH. WAH WAH WAH WAH WAH WAH WAH WAH WAH. WAHWFAWFAWOFAORNWAORNONAWROAWJEDNAWON', {}, True)]
     times_phished: int = 0
 
     @classmethod
@@ -24,6 +40,8 @@ class Game:
         cls.emails.clear()
         for _ in range(cls.day):
             cls.emails.append(cls.make_email())
+
+        for _ in range(cls.day - 1): cls.emails.append(cls.make_email())
         shuffle(cls.emails)
     
     @classmethod
@@ -63,14 +81,40 @@ class Game:
         print("Generated Email:", email)
         return email
 
+    @classmethod
+    def new_address(cls) -> Email: ''' Gemini creates a random address.'''
+
+
+    @classmethod
+    def new_address(cls) -> Email: ''' Gemini creates a random address.'''
+
+
 
 @route('/')
 def index() -> str:
-    return hello('homeslice@phishmail.com')
+    ''' Loading page '''
+    with open('htmlpages/login.html') as file: page = ''.join(file.readlines())
+    return page
 
-@route('/hello/<name>')
-def hello(name):
-    return f'Hello {name}!'
+
+@route('/inbox')
+def inbox():
+    with open('htmlpages/inbox.txt') as template: page = ''.join(template.readlines())
+    return page.replace('EMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILSEMAILS', ''.join(e.as_html() for e in Game.emails))
+
+
+@route('/browser')
+def browser():
+    with open('htmlpages/browser.txt') as template: page = ''.join(template.readlines())
+    return page
+
+
+@route('/info')
+def info():
+    with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
+    return page
+
+
 
 # Generate emails for the game
 Game.generate_emails()
