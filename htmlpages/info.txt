@@ -171,6 +171,10 @@
             display: block;
         }
 
+        .right-align {
+            text-align: right;
+        }
+
         /* Email list styling */
         .email-list {
             margin-bottom: 20px;
@@ -331,10 +335,13 @@
                 </div>
             </div>
             <div id="browser-tab" class="tab-content">
-                <textarea class="empty-text-box" placeholder="Enter your text here..." style="height: 821px; width: 1645px;"></textarea>
+                <p>Browser content goes here.</p>
             </div>
             <div id="info-tab" class="tab-content active">
-                <p>Info content goes here.</p>
+                EMAILSVALIDEMAILSVALID
+                <div class="right-align">
+                    EMAILSVALIDKEYSEMAILSVALIDKEYS
+                </div>
             </div>
         </div>
     </div>
