@@ -53,6 +53,7 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name, num_res
 
 
         response = model.generate_content(prompt)
+        print("gemini.py has run successfully")
         return response.text
 
     except Exception as e:
