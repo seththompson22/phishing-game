@@ -119,7 +119,7 @@
         .tabs {
             display: flex;
             background-color: #f0f0f0;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #555;
         }
 
         .tab {
@@ -130,11 +130,7 @@
             color: #333;
             background-color: #f0f0f0;
             text-align: center;
-            border-right: 1px solid #ccc;
-        }
-
-        .tab:first-child {
-            border-top-left-radius: 8px; /* Rounded top-left corner for the first tab */
+            border-right: 1px solid #777;
         }
 
         .tab:last-child {
