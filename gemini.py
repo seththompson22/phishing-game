@@ -31,7 +31,7 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name):
           "address": "sender@example.com",
           "subject": "Email Subject",
           "body": "Email Body",
-          "checks": {{
+          "flags": {{
             "grammar": "high" or "low",
             "spelling": "high" or "low",
             "time": "any",
@@ -52,7 +52,7 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name):
                 "address": "it@co.net",
                 "subject": "Reset Password",
                 "body": "Dear {user_name}, please reset your password here: fake.com",
-                "checks": {{
+                "flags": {{
                     "grammar": "low",
                     "spelling": "high",
                     "time": "any",
@@ -65,7 +65,7 @@ def generate_email_with_gemini(user_name, acceptable_emails, model_name):
                 "address": "hr@co.com",
                 "subject": "Meeting Reminder",
                 "body": "Team, we have a meeting at 10 AM.",
-                "checks": {{
+                "flags": {{
                     "grammar": "high",
                     "spelling": "high",
                     "time": "any",
