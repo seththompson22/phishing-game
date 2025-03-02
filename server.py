@@ -51,56 +51,75 @@ class Game:
     def generate_emails(cls) -> None:
         ''' Fills the emails list with random emails '''
         cls.emails.clear()
-        cls.emails.append(cls.make_email()) # force phishing
-        for _ in range(cls.day - 1): cls.emails.append(cls.make_email())
+        cls.emails.extend(cls.make_email_batch(cls.day))  # Generate a batch of emails
         shuffle(cls.emails)
     
     @classmethod
-    def make_email(cls) -> Email:
-        ''' Generates an email using Gemini and returns an Email object. '''
-        # check if returned email should be hardcoded or generated
-        if not randint(0, 99):
-            return rchoice([  # random email
-                Email('Waluigi', 'waluigi@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
-                Email('Wario', 'wario@nintendo.com', 'I wanna wah with you', 'Let\'s go wahing in park on tuesday!', {'fakeperson'}, True),
-                Email('Twilight Sparkle', 'tsparkle@mylittlepony.gov', 'Friendship', 'THE POWER OF FRIENDSHIP COMPELS YOU TO GIVE ME MONEY <a href="givememoney.gov">donate today</a>', {'fakeperson'}, True),
-                ## Add more emails
-            ])
+    def make_email_batch(cls, number_of_emails: int) -> list[Email]:
+        """Generates a batch of Email objects.
 
-        # Call the Gemini function to generate an email
-        user_name = "John Smith"  # Replace with dynamic data if needed
-        acceptable_emails = ["support@company.com", "hr@company.com"]  # Replace with your list
-        model_name = "gemini-1.5-flash"  # Replace with your model name
+        Args:
+            number_of_emails (int): The number of emails to generate.
 
-        raw_response = generate_email_with_gemini(user_name, acceptable_emails, model_name)
+        Returns:
+            list[Email]: A list of Email objects.
+        """
 
-        # Step 1: Remove the Markdown code block markers (if present)
-        cleaned_response = raw_response.strip("```json\n").rstrip("```").strip()
-
-        # Step 2: Parse the cleaned JSON
-        try:
-            email_data_list = json.loads(cleaned_response)  # This is a list of dictionaries
-            print("Parsed JSON:", email_data_list)
-
-            # Select the first email from the list
-            email_data = email_data_list[0]  # Select the first dictionary
-        except (json.JSONDecodeError, IndexError) as e:
-            print("Failed to parse JSON or select email:", e)
-            print("Raw Response:", raw_response)
-            raise e  # Re-raise the exception to stop further execution
-
-        # Create an instance of the Email class
-        email = Email(
-            name=email_data["name"],
-            address=email_data["address"],
-            subject=email_data["subject"],
-            body=email_data["body"],
-            flags=email_data["checks"],
-            is_phish=email_data["is_phish"]
+        emails = []
+        fallback_email = Email(
+            name="IT Support",
+            address="support@company.com",
+            subject="Password Reset Required",
+            body="Dear user, please reset your password using this link: reset-password.com",
+            flags={"grammar": "high", "spelling": "high", "time": "any", "links": "suspicious"},
+            is_phish=True
         )
-        print("Generated Email:", email)
-        print("Parsed JSON:", email_data_list)  # Print the parsed JSON data
-        return email
+
+        try:
+            raw_response = generate_email_with_gemini(
+                "John Smith", ["support@company.com", "hr@company.com"], "gemini-2.0-flash-lite", number_of_emails
+            )
+
+            if raw_response:
+                # Attempt to parse and create Email objects
+                try:
+                    lines = raw_response.strip().split('\n')
+                    for line in lines:
+                        parts = line.split('|')
+                        if len(parts) == 9:
+                            try:
+                                email = Email(
+                                    name=parts[0],
+                                    address=parts[1],
+                                    subject=parts[2],
+                                    body=parts[3],
+                                    flags={
+                                        "grammar": parts[4],
+                                        "spelling": parts[5],
+                                        "time": parts[6],
+                                        "links": parts[7]
+                                    },
+                                    is_phish=parts[8].lower() == 'true'
+                                )
+                                emails.append(email)
+                            except Exception as e:
+                                print(f"Error parsing line: {line}, error: {e}")
+
+                except (json.JSONDecodeError, IndexError, KeyError) as e:
+                    print("Failed to parse JSON or create Email object:", e)
+                    print("Raw Response:", raw_response)
+                    # Add fallback email if any parsing or creation error occurs
+                    emails.append(fallback_email)
+            else:
+                print("API returned an empty response. Using fallback email.")
+                emails.append(fallback_email)
+
+        except Exception as e:
+            print("Error generating emails:", e)
+            # Add fallback email if any other error occurs
+            emails.append(fallback_email)
+
+        return emails
 
     @classmethod
     def new_address(cls) -> Email: ''' Gemini creates a random address.'''
@@ -138,10 +157,8 @@ def info():
     with open('htmlpages/info.txt') as template: page = ''.join(template.readlines())
     return page
 
-
-
 # Generate emails for the game
-# Game.generate_emails()
+Game.generate_emails()
 
 # Run the server
 run(host='localhost', port=8080, debug=True)
